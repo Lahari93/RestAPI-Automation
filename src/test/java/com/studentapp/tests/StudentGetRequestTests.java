@@ -1,18 +1,15 @@
 package com.studentapp.tests;
 
-import org.junit.jupiter.api.Disabled;
+import static io.restassured.RestAssured.given;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
-import io.restassured.response.ValidatableResponse;
-import io.restassured.specification.RequestSpecification;
-
-import static io.restassured.RestAssured.*;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class StudentGetRequestTests extends TestBase{
 	
@@ -91,5 +88,69 @@ public class StudentGetRequestTests extends TestBase{
 		
 		
 	}
+	
+	@DisplayName("HamcrestMatchers")
+	@Test
+	void test001() {
+		
+		Response response = 
+				given()
+				.queryParam("query", "ipod")	
+				.when()
+				.get("/search")
+				.then()
+				.body("numId", equals(10));
+		
+		
+			
+		
+	}
+	@DisplayName("Check Single Name in Array List")
+	@Test
+	void test002() {
+		
+		Response response = 
+				given()
+				.queryParam("query", "ipod")	
+				.when()
+				.get("/search")
+				.then()
+				.body("items.name", hasItem("Appleipod"));
+		
+		
+	}
+	
+	@DisplayName("Check hashmap values in a list ")
+	@Test
+	void test003() {
+		
+		Response response = 
+				given()
+				.queryParam("query", "ipod")	
+				.when()
+				.get("/search")
+				.then()
+				.body("items.findAll{it.name==''}, hasItems(hasEntry("name ","APPLEIpod	"));
+		
+		
+	}
+	@DisplayName("Multiple Assertions")
+	@Test
+	void test004() {
+		
+		Response response = 
+				given()
+				.queryParam("query", "ipod")	
+				.when()
+				.get("/search")
+				.then()
+				.body("numId", equals(10));
+				.body("items.findAll{it.name==''}, hasItems(hasEntry("name ","APPLEIpod	"));"
+			    .statusCode(200);
+		
+		
+	}
+	
+	
 	
 }
