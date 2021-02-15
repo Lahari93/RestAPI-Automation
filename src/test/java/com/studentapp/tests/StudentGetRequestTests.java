@@ -1,6 +1,8 @@
 package com.studentapp.tests;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -93,13 +95,19 @@ public class StudentGetRequestTests extends TestBase{
 	@Test
 	void test001() {
 		
-		Response response = 
+		
+		 given()
+			.queryParam("query", "ipod")	
+			.when()
+			.get("/search")
+			.then()
+			.body("numId", hasItem("Appleipod"));
 				given()
 				.queryParam("query", "ipod")	
 				.when()
 				.get("/search")
 				.then()
-				.body("numId", equals(10));
+				.body("numId", equalTo(10));
 		
 		
 			
@@ -108,14 +116,12 @@ public class StudentGetRequestTests extends TestBase{
 	@DisplayName("Check Single Name in Array List")
 	@Test
 	void test002() {
-		
-		Response response = 
-				given()
-				.queryParam("query", "ipod")	
-				.when()
-				.get("/search")
-				.then()
-				.body("items.name", hasItem("Appleipod"));
+		 given()
+		.queryParam("query", "ipod")	
+		.when()
+		.get("/search")
+		.then()
+		.body("items.name", hasItem("Appleipod"));
 		
 		
 	}
@@ -124,13 +130,12 @@ public class StudentGetRequestTests extends TestBase{
 	@Test
 	void test003() {
 		
-		Response response = 
 				given()
 				.queryParam("query", "ipod")	
 				.when()
 				.get("/search")
 				.then()
-				.body("items.findAll{it.name==''}, hasItems(hasEntry("name ","APPLEIpod	"));
+				.body("items.findAll{it.name==''}", hasItems(hasEntry("name ","APPLEIpod")));
 		
 		
 	}
@@ -138,16 +143,15 @@ public class StudentGetRequestTests extends TestBase{
 	@Test
 	void test004() {
 		
-		Response response = 
+		
 				given()
 				.queryParam("query", "ipod")	
 				.when()
 				.get("/search")
 				.then()
-				.body("numId", equals(10));
-				.body("items.findAll{it.name==''}, hasItems(hasEntry("name ","APPLEIpod	"));"
-			    .statusCode(200);
-		
+				.body("numId", equalTo(10))
+				.body("items.findAll{it.name==''}", hasItems(hasEntry("name ","APPLEIpod")));
+			    
 		
 	}
 	
